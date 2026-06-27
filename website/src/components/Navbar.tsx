@@ -39,7 +39,10 @@ export default function Navbar() {
     <header
       className={cn(
         "fixed inset-x-0 top-0 z-50 transition-all duration-300",
-        scrolled ? "glass border-b border-white/10" : "border-b border-transparent"
+        "backdrop-blur-[12px] [backdrop-filter:blur(12px)_saturate(140%)] [-webkit-backdrop-filter:blur(12px)_saturate(140%)]",
+        scrolled
+          ? "bg-[rgba(23,22,22,0.78)] border-b border-white/10 shadow-lg shadow-black/30"
+          : "bg-transparent border-b border-transparent"
       )}
     >
       <Container className="flex h-16 items-center justify-between">
@@ -98,11 +101,12 @@ export default function Navbar() {
         </div>
       </Container>
 
-      {/* Mobile menu */}
+      {/* Mobile menu - own glass layer so overflow:hidden doesn't clip backdrop-filter */}
       <div
         className={cn(
-          "overflow-hidden border-t border-white/5 transition-[max-height,opacity] duration-300 md:hidden",
-          open ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+          "border-t border-white/5 transition-[max-height,opacity] duration-300 md:hidden",
+          "bg-[rgba(23,22,22,0.88)] [backdrop-filter:blur(12px)_saturate(140%)] [-webkit-backdrop-filter:blur(12px)_saturate(140%)]",
+          open ? "max-h-96 opacity-100" : "max-h-0 opacity-0 overflow-hidden"
         )}
       >
         <Container className="flex flex-col gap-1 py-4">
