@@ -110,6 +110,17 @@ export default function Footer() {
           <p className="text-xs text-neutral-500 font-display-sans">
             © {new Date().getFullYear()} Sednium | The .ai-format format specification
           </p>
+          <p className="text-xs text-neutral-600 font-display-sans">
+            Built with ❤️ by{" "}
+            <a
+              href="https://github.com/CoderBhoid"
+              target="_blank"
+              rel="noreferrer"
+              className="text-neutral-400 hover:text-coral transition-colors"
+            >
+              Bhoid
+            </a>
+          </p>
         </div>
       </Container>
     </footer>

@@ -19,6 +19,20 @@
 
 **Author**: Bhoid
 
+---
+
+## Quick Start
+
+Get up and running in one command:
+
+```bash
+git clone https://github.com/CoderBhoid/ai-format.git && cd ai-format && python test_v3_features.py
+```
+
+That clones the repo, enters the directory, and runs the full automated test suite to verify everything works on your machine.
+
+---
+
 ## Overview
 This repository contains the blueprints, research, and core implementation scripts for the **`.ai` file format** - a highly secure, block-based, temporally-aware local memory system for autonomous AI agents. 
 
@@ -95,3 +109,7 @@ We welcome contributions to the `.ai` context standard! Prior to contributing, p
 
 *   **Code License**: Licensed under the open-source MIT License. See [LICENSE.md](LICENSE.md) for full terms.
 *   **Terms and Conditions**: Usage is governed by [TERMS_AND_CONDITIONS.md](TERMS_AND_CONDITIONS.md) which contains critical safety restrictions (e.g. prohibition of weaponization, cognitive surveillance, and malicious AI execution).
+
+---
+
+<p align="center">Built with ❤️ by <a href="https://github.com/CoderBhoid">Bhoid</a></p>
