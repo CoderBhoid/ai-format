@@ -233,3 +233,110 @@
     background-position: 200% center;
   }
 }
+
+/* =========================================================
+   MOBILE TAP & TOUCH EFFECTS
+   ========================================================= */
+
+/* 1. Kill the 300ms tap delay and the default blue flash on all
+      tappable elements so our custom effects take over cleanly. */
+a,
+button,
+[role="button"],
+.btn,
+.chip,
+.card {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+/* 2. Press-down feel — all interactive elements scale slightly
+      on :active so taps give immediate physical feedback. */
+@keyframes tap-ripple {
+  0%   { transform: scale(1);    opacity: 0.18; }
+  60%  { transform: scale(2.6);  opacity: 0; }
+  100% { transform: scale(2.6);  opacity: 0; }
+}
+
+/* 3. Buttons — satisfying sink + glow flash on tap */
+.btn:active {
+  transform: scale(0.95) translateY(1px);
+  transition: transform 0.08s ease, box-shadow 0.08s ease;
+}
+.btn-primary:active {
+  box-shadow: 0 0 0 4px rgba(249, 92, 75, 0.25),
+              0 6px 20px -8px rgba(249, 92, 75, 0.5);
+}
+.btn-ghost:active {
+  background: rgba(249, 92, 75, 0.1);
+  border-color: rgba(249, 92, 75, 0.4);
+}
+
+/* 4. Nav links — quick colour pop on tap */
+nav a:active,
+footer a:active {
+  color: var(--color-coral);
+  transform: scale(0.96);
+  transition: transform 0.08s ease, color 0.08s ease;
+}
+
+/* 5. Cards — subtle press-down */
+.card:active {
+  transform: scale(0.985);
+  border-color: rgba(249, 92, 75, 0.25);
+  transition: transform 0.1s ease, border-color 0.1s ease;
+}
+
+/* 6. Chips — quick invert on tap */
+.chip:active {
+  background: rgba(249, 92, 75, 0.12);
+  border-color: rgba(249, 92, 75, 0.35);
+  transform: scale(0.94);
+  transition: transform 0.08s ease, background 0.08s ease;
+}
+
+/* 7. Hamburger menu button */
+button[aria-label="Toggle menu"]:active {
+  background: rgba(249, 92, 75, 0.12);
+  border-color: rgba(249, 92, 75, 0.35);
+  transform: scale(0.9);
+  transition: transform 0.1s ease;
+}
+
+/* 8. Mobile menu links — full-width tap area with flash */
+.mobile-link:active {
+  background: rgba(249, 92, 75, 0.08);
+  color: #ffffff;
+}
+
+/* 9. Smooth tap targets — ensure nothing is too small to tap
+      (WCAG recommends 44×44 px minimum touch target) */
+@media (pointer: coarse) {
+  nav a {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  /* Slightly looser line-height on body text for mobile readability */
+  p, li {
+    line-height: 1.75;
+  }
+
+  /* Enlarge chip tap areas */
+  .chip {
+    padding: 0.55rem 0.9rem;
+  }
+}
+
+/* 10. Respect reduced-motion — keep press feel but skip scale animation */
+@media (prefers-reduced-motion: reduce) {
+  .btn:active,
+  nav a:active,
+  footer a:active,
+  .card:active,
+  .chip:active,
+  button[aria-label="Toggle menu"]:active {
+    transform: none;
+  }
+}

@@ -115,7 +115,7 @@ export default function Navbar() {
               key={l.href}
               href={l.href}
               onClick={() => setOpen(false)}
-              className="rounded-lg px-4 py-3 text-base text-neutral-300 transition-colors hover:bg-white/5 hover:text-white"
+              className="mobile-link rounded-lg px-4 py-3 text-base text-neutral-300 transition-colors hover:bg-white/5 hover:text-white"
             >
               {l.label}
             </a>
