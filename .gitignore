@@ -1,0 +1,31 @@
+# Python files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.venv/
+venv/
+env/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Project local caches
+.ai/
+checkpoints/
+keys/
+*.ai
+mock_v3_test_conversation/
+optimizer_test.ai
+
+# Website dependencies and build files
+website/node_modules/
+website/dist/
+website/build/
+
+# Local configuration files
+.env
+.env.local
+.env.*.local
