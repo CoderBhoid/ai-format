@@ -1,101 +1,85 @@
 ---
 name: ai-context-saving
-description: "Teaches the agent how to save and load cognitive context snapshots using the production-grade secure .ai-format file format, preserving memory states across runs with temporal decay."
+description: "Teaches the agent how to save, recall, bridge, and optimize cognitive context using the high-performance AIF V4 Rust engine with orbital gravity rings, cross-project bridging, and interrupt protection."
 ---
 
-# Secure AI Context Saving & Restoring
+# AIF V4 Agent Memory & Synaptic Bridge Skill
 
-This skill defines the standard operating procedures for saving, loading, and managing persistent cognitive checkpoints using the `.ai` file format, incorporating temporal memory decay and automatic keychain management.
-
-## Overview
-
-Unlike raw text files (`.md`, `.txt`), the `.ai` file format stores compressed, post-quantum cryptographically secured representations of an agent's memory, context, and conversation logs. It allows agents to load large histories instantly, bypassing long input-prefill computation phases.
+This skill defines the operational procedures for managing persistent cognitive memory states using the compiled `aif` Rust engine (`AIF\x04`).
 
 ---
 
-## When to Save Context
+## 1. Quick Start Workflow
 
-You should proactively serialize and save active context to a `.ai` file in the following scenarios:
-1. **Milestone Completion**: After finishing a major coding phase, debugging loop, or architectural plan.
-2. **Pre-Flight Checkpoint**: Before running high-risk commands (e.g., database migrations, destructive git commands) to create a recovery state.
-3. **Session Shutdown**: When wrapping up a session or preparing to hand off work to another agent.
-
-During serialization, the context engine applies **Temporal Memory Decay**:
-- **Fresh Context (< 1 Hour)**: Saved at `FP16_RAW` resolution (100% detail retention).
-- **Medium-term Context (< 1 Day)**: Pruned of redundant helper tokens and quantized to `INT8`.
-- **Ancient Context (> 1 Day)**: Condensed into high-level `INT2` semantic concepts.
-
----
-
-## When to Load Context
-
-You should search for and deserialize `.ai` files:
-1. **Session Resumption**: At the start of a task, if a previously saved `.ai` file exists in the directory.
-2. **Shared Agent Handoff**: If another agent has generated a context snapshot and passed it to you for continuation.
-
----
-
-## How to Interface with the `.ai` Format Engine
-
-Use the system script `ai_format_production.py` to pack and unpack files. The script supports programmatic integration or shell calls.
-
-### 1. Saving (Packing) Context
-To pack a session context, prepare the metadata and payload dictionary, and call the python serialization tool:
-
-```python
-from ai_format_production import ProductionAIContextFile
-
-# 1. Define Metadata (Plaintext headers are hidden inside the envelope)
-metadata = {
-    "format_version": "AIF_V2",
-    "target_model": "Llama-3-70B",
-    "conversation_id": "8159f7ce-0a39-49a4-abf5-fecd766822f2"
-}
-
-# 2. Extract context history or internal memory states
-payload = {
-    "task_list": ["Refactor auth", "Verify unit tests"],
-    "history": [
-        {"role": "user", "text": "Extract all context..."},
-        {"role": "assistant", "text": "Context extracted successfully."}
-    ]
-}
-
-# 3. Initialize engine with a secure key (e.g., derived from a secure vault)
-key = b"super_secret_agent_identity_key_32b"
-engine = ProductionAIContextFile(master_key_bytes=key)
-
-# 4. Save secure context to disk
-engine.serialize(metadata, payload, "session_context.ai")
 ```
-
-### 2. Loading (Unpacking) Context
-To resume from a checkpoint:
-
-```python
-from ai_format_production import ProductionAIContextFile
-
-# Initialize engine with the key
-key = b"super_secret_agent_identity_key_32b"
-engine = ProductionAIContextFile(master_key_bytes=key)
-
-try:
-    # Deserialize context
-    metadata, payload = engine.deserialize("session_context.ai")
-    
-    # Ingest details back into active prompt context or task list
-    print(f"Resuming session from: {metadata['conversation_id']}")
-    active_history = payload["history"]
-    
-except PermissionError:
-    # Handle incorrect key or tampering detection
-    print("Failed to authenticate context file. Integrity validation failed.")
++-------------------------------------------------------------------------------+
+| 1. Chat Boot        -->  aif recall --core-and-bridge                         |
+| 2. During Work      -->  aif scratch "<active step / in-flight state>"        |
+| 3. End of Turn      -->  aif note --importance <0.0-1.0> --summary "<action>" |
+| 4. Cross-Project    -->  aif bridge --query "<topic>"                         |
+| 5. Maintenance      -->  aif optimize --delta 0.05                            |
++-------------------------------------------------------------------------------+
 ```
 
 ---
 
-## Cryptographic & Keychain Guidelines
+## 2. Orbital Gravity Rings (`AIF\x04`)
 
-1. **Verify Integrity First**: Never parse or decompress a `.ai` file if the signature check fails. The loader script uses Encrypt-then-MAC (EtM) to reject tampered bytes before decompression.
-2. **Keychain Retrieval**: Prior to prompting the user for a decryption key, check the secure local AppData keychain folder (`~/.gemini/ai-format/keys/`) for a non-expired key matching the session ID.
-3. **Always Check Model Target**: Before loading context variables, verify the `target_model` field in the decrypted metadata matches your running model architecture.
+Memories are partitioned into three concentric orbital rings based on agent self-evaluation:
+
+1. **Red Core (`INT16_CORE` / `FP16_RAW`, $S_{attn} \ge 0.7$)**:
+   - Stores architectural decisions, critical project schemas, and interrupted states (`[PAUSED_MID_TASK]`).
+   - Automatically loaded on session initialization and indexed in `bridge_nexus.ai`.
+2. **Black Middle Ring (`INT8_RING`, $0.3 \le S_{attn} < 0.7$)**:
+   - Working memories, implementation details, and turn summaries.
+   - Common helper words and stop words are pruned to save tokens while preserving semantics.
+   - Lazy-loaded on demand via byte-range `Seek` (Partial Envelope Unpacking).
+3. **Blue Outer Crust (`INT2_CRUST` / `INT2_DEEP_SUMMARY`, $S_{attn} < 0.3$)**:
+   - Minor observations and temporally decayed memories.
+   - Ultra-compact gist summaries.
+
+---
+
+## 3. CLI Command Reference
+
+### A. Initialization
+```bash
+./ai.sh init --project <project_id> --model <model_id>
+```
+Creates `<project_id>.ai`, generates the deterministic 256-bit AEAD key in `~/.gemini/ai-format/keys/<project_id>__<model_id>.key` with `0600` permissions, registers the project in `bridge_nexus.ai`, and sets workspace defaults.
+
+### B. Boot Recall
+```bash
+./ai.sh recall --core-and-bridge
+```
+Preloads active project `INT16_CORE` blocks and lists cross-project synaptic pointers without touching outer rings.
+
+### C. Write Volatile Scratch State
+```bash
+./ai.sh scratch "Refactoring auth handler and verifying token signature"
+```
+Writes in-flight intent to `.agents/ai-format/.scratch_state.tmp`. On `SIGINT`/`SIGTERM`/abrupt stop, the engine automatically commits this scratch buffer into `INT16_CORE` with importance `0.95`.
+
+### D. End-of-Turn Memory Commit
+```bash
+./ai.sh note --importance 0.85 --summary "Completed Rust rewrite of crypto module" --tags "crypto,aead,rust"
+```
+
+### E. Cross-Project Bridge Query
+```bash
+./ai.sh bridge --query "authentication"
+```
+Performs sub-millisecond Partial Envelope Unpacking directly into the target project's `INT16_CORE` byte offsets without loading outer rings.
+
+### F. Reweight Memory
+```bash
+./ai.sh reweight --block note_1720000000_0 --importance 0.90
+```
+
+### G. Autonomous Temporal Optimization
+```bash
+./ai.sh optimize --delta 0.05 --keywords "auth,crypto"
+```
+Applies Ebbinghaus temporal decay:
+$$S_{attn}^{(t)} = \max(0, S_{attn}^{(t-1)} - \delta) + \text{keyword\_boost}$$
+Migrates blocks across rings and upgrades legacy `AIF\x03` files to `AIF\x04`.

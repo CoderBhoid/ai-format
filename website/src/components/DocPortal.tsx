@@ -2,37 +2,37 @@ import { useState } from "react";
 import { Container, Eyebrow, Icon, Reveal, ScrollWordReveal } from "./ui";
 
 const SIDEBAR = [
-  "SDKs & clients",
-  "File format spec",
-  "Integration guides",
-  "API reference",
+  "Quick Start",
+  "CLI Reference",
+  "Orbital Rings & Bridge",
+  "File format spec (V4)",
   "Changelog",
 ];
 
 const TOPICS = [
   {
-    icon: "doc",
-    title: "Integration guides",
-    desc: "Wire the .ai serializer into your agent runtime, step by step.",
-    tab: "Integration guides",
-  },
-  {
     icon: "terminal",
-    title: "API reference",
-    desc: "save(), load(), and checkpoint primitives  -  typed and documented.",
-    tab: "API reference",
+    title: "Quick Start",
+    desc: "1-Click universal agent prompt and one-line curl installer.",
+    tab: "Quick Start",
   },
   {
-    icon: "shield",
-    title: "File format spec",
-    desc: "Header layout, credentials envelope, and quantization tiers defined.",
-    tab: "File format spec",
+    icon: "doc",
+    title: "CLI Reference",
+    desc: "Every command, flag, and argument typed and explained.",
+    tab: "CLI Reference",
   },
   {
     icon: "hub",
-    title: "SDKs & clients",
-    desc: "First-class bindings for the languages your stack already runs.",
-    tab: "SDKs & clients",
+    title: "Orbital Rings & Bridge",
+    desc: "Red Core, Middle Ring, Outer Crust, and Cross-Project Bridge.",
+    tab: "Orbital Rings & Bridge",
+  },
+  {
+    icon: "shield",
+    title: "File format spec (V4)",
+    desc: "AIF\\x04 binary layout, ChaCha20 EtM, and 0600 keychains.",
+    tab: "File format spec (V4)",
   },
 ];
 
@@ -46,221 +46,204 @@ const DOCS_DATA: Record<
     note: string;
   }
 > = {
-  "SDKs & clients": {
-    tag: "SDK",
-    title: "SDKs & Core Clients",
-    desc: "First-class bindings, CLI utilities, and runtime connectors for Python and C++ agent execution environments.",
+  "Quick Start": {
+    tag: "INSTALL",
+    title: "Quick Start and Agent Migration",
+    desc: "Deploy AIF V4 in seconds via the one-line installer or copy the universal prompt directly to your AI agent.",
     content: `<div class="space-y-6 text-sm text-neutral-300 leading-relaxed font-sans">
   <p>
-    The <strong>ai-format</strong> library provides official SDKs and scripts to manage your agent's memory. These connectors allow tools to parse and serialize memory states directly in the runtime memory space.
+    AIF V4 compiles to a single standalone binary named <code>aif</code>. You can install it on your system with one command or instruct your AI coding assistant to configure itself automatically.
   </p>
 
-  <h4 class="text-white font-semibold text-base mt-4 font-display-serif italic">The Flight Recorder Analogy</h4>
+  <h4 class="text-white font-semibold text-base mt-4 font-display-serif italic">Option 1: One-Line Installer</h4>
+  <p>Run this script in your terminal on Linux or macOS:</p>
+  <pre class="bg-black/40 border border-white/8 rounded-lg p-4 font-mono text-xs text-coral overflow-x-auto">curl -fsSL https://ai.sednium.com/install.sh | sh</pre>
+
+  <p class="mt-2">On Windows (PowerShell):</p>
+  <pre class="bg-black/40 border border-white/8 rounded-lg p-4 font-mono text-xs text-coral overflow-x-auto">irm https://ai.sednium.com/install.ps1 | iex</pre>
+
+  <h4 class="text-white font-semibold text-base mt-4 font-display-serif italic">Option 2: The Universal Agent Migration Prompt</h4>
   <p>
-    To understand how this setup integrates with your work, consider the analogy of a commercial aircraft flight recorder. A flight recorder does not save a text transcript of every conversation on board. Instead, it continuously logs raw telemetry data (heading, altitude, and velocity) in a robust, structured format. In the same way, the ai-format utility acts as a specialized recorder for your agent. It writes a structured state mapping containing current objectives, active variable states, and conversation logs. When your agent restarts, it does not need to re-read thousands of words of conversation history. It simply reads the flight recorder file and restores its cognitive state in milliseconds.
+    Copy and paste this instruction block into Cursor, Claude Code, Antigravity, or Windsurf. Your agent will clone the repository, build the Rust binary, and inject the persistent memory lifecycle into your global configuration automatically:
   </p>
 
-  <h4 class="text-white font-semibold text-base mt-4">1. Python Agent Connector</h4>
-  <p>
-    For Python agent architectures, the core toolkit contains:
-  </p>
-  <ul class="list-disc pl-5 space-y-2">
-    <li><code>save_active_context.py</code>: Serializes conversation histories, active task trees, and variable lists into encrypted block containers.</li>
-    <li><code>recall_context.py</code>: Command line interface to query, inspect, and selectively lazy load specific variables or dialogue turns.</li>
-    <li><code>autonomous_optimizer.py</code>: Background optimization process that runs memory decay algorithms, links context files, and purges obsolete tokens.</li>
-  </ul>
+  <pre class="bg-black/40 border border-white/8 rounded-lg p-4 font-mono text-xs text-neutral-200 overflow-x-auto whitespace-pre">You are an expert systems engineer. Install the AIF V4 (ai-format) memory engine and configure my global agent rules:
 
-  <h4 class="text-white font-semibold text-base mt-4">2. High-Performance Bindings (C++ & vLLM)</h4>
-  <p>
-    For systems requiring native tensor operations:
-  </p>
-  <ul class="list-disc pl-5 space-y-2">
-    <li><strong>vLLM Runtimes</strong>: Connects directly to the virtual memory manager (<code>PagedAttention</code> blocks), writing active KV pages straight to disk to bypass re-tokenization.</li>
-    <li><strong>Llama.cpp Engines</strong>: Utilizes custom hooks on <code>llama_state_get_data()</code> and <code>llama_state_set_data()</code> to serialize internal layer states.</li>
-  </ul>
+1. Clone and compile:
+   git clone https://github.com/CoderBhoid/ai-format.git ~/.ai-format
+   cd ~/.ai-format && cargo build --release
+   mkdir -p ~/.local/bin && ln -sf ~/.ai-format/target/release/aif ~/.local/bin/aif
 
-  <h4 class="text-white font-semibold text-base mt-4">3. Local Environment Variables</h4>
-  <p>
-    Configure your runtime environment by adding the path variables in your local environment file:
-  </p>
-  <pre class="bg-black/40 border border-white/8 rounded-lg p-4 font-mono text-xs text-coral">
-AI_FORMAT_PATH="./.ai/checkpoints"
-AI_KEYCHAIN_PATH="~/.ai/keys"</pre>
+2. Initialize memory for current project:
+   aif init --project "$(basename "$PWD")" --model "default"
+
+3. Update my global agent instructions (e.g. ~/.cursorrules, ~/.claude/CLAUDE.md, or ~/.gemini/config/AGENTS.md):
+   - At session start: run \`aif recall --core-and-bridge\`
+   - Before multi-step tasks: run \`aif scratch "&lt;active task&gt;"\`
+   - End of turn: run \`aif note --project &lt;project&gt; --importance &lt;0.0-1.0&gt; --summary "&lt;summary&gt;"\`
+   - Cross-project context: run \`aif bridge --query "&lt;topic&gt;"\`
+
+4. Verify setup:
+   aif note --importance 0.95 --summary "AIF V4 migration complete"
+   aif recall --core-and-bridge</pre>
 </div>`,
-    note: "Official packages are compiled for Python 3.10+ and C++17 compilers. Make sure you install the cryptography libraries before compiling native bindings."
+    note: "The installer places the binary in ~/.local/bin/aif and runs automated IDE rule discovery."
   },
-  "File format spec": {
+  "CLI Reference": {
+    tag: "CLI",
+    title: "Command-Line Interface Reference",
+    desc: "Complete documentation for every subcommand in the aif binary.",
+    content: `<div class="space-y-6 text-sm text-neutral-300 leading-relaxed font-sans">
+  <p>
+    The compiled binary provides eight commands. Each command is tuned for sub-millisecond execution and deterministic exit codes.
+  </p>
+
+  <h4 class="text-white font-semibold text-base mt-4">1. aif init</h4>
+  <p>Creates <code>&lt;project&gt;.ai</code>, generates the 256-bit AEAD key with 0600 permissions, registers the project in <code>bridge_nexus.ai</code>, and auto-injects agent rules into detected IDE configs.</p>
+  <pre class="bg-black/40 border border-white/8 rounded-lg p-3 font-mono text-xs text-coral">aif init --project frontend_web --model gemini-3.5-flash</pre>
+
+  <h4 class="text-white font-semibold text-base mt-4">2. aif note</h4>
+  <p>Appends a cognitive memory block. Places notes into Red Core (>=0.70), Middle Ring (0.30-0.69, stop words pruned), or Outer Crust (&lt;0.30, summarized).</p>
+  <pre class="bg-black/40 border border-white/8 rounded-lg p-3 font-mono text-xs text-coral">aif note --project frontend_web --importance 0.92 --summary "Migrated state store to Zustand" --tags "state,store,arch"</pre>
+
+  <h4 class="text-white font-semibold text-base mt-4">3. aif recall</h4>
+  <p>Retrieves memories via Partial Envelope Unpacking. Supports loading Red Core, searching queries, or reading raw block payloads.</p>
+  <pre class="bg-black/40 border border-white/8 rounded-lg p-3 font-mono text-xs text-coral">aif recall --core-and-bridge
+aif recall --query "Zustand"
+aif recall --block note_1720000000_0</pre>
+
+  <h4 class="text-white font-semibold text-base mt-4">4. aif bridge</h4>
+  <p>Queries cross-project memory pointers in <code>bridge_nexus.ai</code> and directly seeks target project core blocks in under 1 millisecond.</p>
+  <pre class="bg-black/40 border border-white/8 rounded-lg p-3 font-mono text-xs text-coral">aif bridge --query "authentication"
+aif bridge --project backend_api</pre>
+
+  <h4 class="text-white font-semibold text-base mt-4">5. aif scratch</h4>
+  <p>Writes volatile in-flight state to <code>.scratch_state.tmp</code>. Armed signal handlers automatically flush this buffer to Red Core on interrupt.</p>
+  <pre class="bg-black/40 border border-white/8 rounded-lg p-3 font-mono text-xs text-coral">aif scratch "Refactoring auth token validation and running integration tests"</pre>
+
+  <h4 class="text-white font-semibold text-base mt-4">6. aif reweight</h4>
+  <p>Promotes or demotes existing memories. Recalculates ring placement and adjusts quantization dynamically.</p>
+  <pre class="bg-black/40 border border-white/8 rounded-lg p-3 font-mono text-xs text-coral">aif reweight --block note_1720000000_1 --importance 0.88</pre>
+
+  <h4 class="text-white font-semibold text-base mt-4">7. aif optimize</h4>
+  <p>Runs Ebbinghaus temporal decay, reassigns blocks across orbital rings, and upgrades legacy V3 files to V4.</p>
+  <pre class="bg-black/40 border border-white/8 rounded-lg p-3 font-mono text-xs text-coral">aif optimize --delta 0.05 --keywords "auth,zustand"</pre>
+
+  <h4 class="text-white font-semibold text-base mt-4">8. aif watch</h4>
+  <p>Foreground process holding signal traps active. Catches Ctrl+C or kill signals and commits volatile state to core memory before exiting.</p>
+  <pre class="bg-black/40 border border-white/8 rounded-lg p-3 font-mono text-xs text-coral">aif watch --project frontend_web</pre>
+</div>`,
+    note: "All commands return exit code 0 on success and exit code 1 on verification failure."
+  },
+  "Orbital Rings & Bridge": {
+    tag: "ARCHITECTURE",
+    title: "Orbital Gravity Rings & Cross-Project Synaptic Bridge",
+    desc: "Hierarchical memory organization and sub-millisecond cross-repository context sharing.",
+    content: `<div class="space-y-6 text-sm text-neutral-300 leading-relaxed font-sans">
+  <p>
+    Standard flat context dumps force models to waste input tokens re-reading low-priority logs. AIF V4 introduces concentric gravity rings governed by agent-evaluated attention scores:
+  </p>
+
+  <h4 class="text-white font-semibold text-base mt-4">1. Red Core (INT16_CORE / FP16_RAW)</h4>
+  <p>
+    Triggered when importance score is greater than or equal to 0.70. Retains high-importance architectural choices, schema definitions, and interrupted states. Loaded on chat boot and indexed in the master bridge.
+  </p>
+
+  <h4 class="text-white font-semibold text-base mt-4">2. Black Middle Ring (INT8_RING)</h4>
+  <p>
+    Triggered when importance score is between 0.30 and 0.69. Standard turn notes and implementation steps. Common helper words and stop words are stripped to compress token consumption while preserving semantics.
+  </p>
+
+  <h4 class="text-white font-semibold text-base mt-4">3. Blue Outer Crust (INT2_CRUST)</h4>
+  <p>
+    Triggered when importance score is below 0.30 or after temporal decay. Notes are compressed into concise gist summaries.
+  </p>
+
+  <h4 class="text-white font-semibold text-base mt-4">4. Cross-Project Synaptic Bridge</h4>
+  <p>
+    <code>bridge_nexus.ai</code> stores direct byte offsets to Red Core blocks across projects. When Project B needs context from Project A, the engine opens Project A's file, seeks straight to the byte offset, verifies the block HMAC, and unpacks the memory in under 1 millisecond without touching outer rings.
+  </p>
+</div>`,
+    note: "Orbital migration happens automatically when running 'aif optimize' or 'aif reweight'."
+  },
+  "File format spec (V4)": {
     tag: "SPEC",
-    title: "AIF_V3 Binary Specification",
-    desc: "The binary file layout of the Version 3 format, specifying HMAC signatures, lazy load indexes, and quantization layers.",
+    title: "AIF V4 Binary Format Specification",
+    desc: "The binary structure of .ai V4 files, ChaCha20 Encrypt-then-MAC, and 0600 keychains.",
     content: `<div class="space-y-6 text-sm text-neutral-300 leading-relaxed font-sans">
   <p>
-    The <code>.ai</code> format is a block-partitioned binary container designed for secure, lazy-loaded cognitive snapshots. It separates unencrypted metadata indexing from encrypted payload data.
+    AIF V4 files start with the 4-byte magic signature <code>b"AIF\\x04"</code> followed by the structural header and concatenated block ciphertexts.
   </p>
 
-  <h4 class="text-white font-semibold text-base mt-4">1. Binary Layout Structure</h4>
-  <p>
-    The file layout is split into a clear metadata index block and individual encrypted block containers:
-  </p>
-  <pre class="bg-black/40 border border-white/8 rounded-lg p-4 font-mono text-xs text-coral">
-+------------------+---------------------+-------------------+-----------------------+-------------------------+
-| MAGIC (4 bytes)  | HEADER_LEN (4 bytes)| HEADER_MAC (32B)  | UNENCRYPTED JSON      | PAYLOAD (Concatenated   |
-| 'AIF\\x03'        | Big-Endian Integer  | HMAC-SHA256 of    | HEADER (block maps,   | block ciphertexts       |
-|                  |                     | JSON header       | graph links, salts)   | encrypted with salts)   |
-+------------------+---------------------+-------------------+-----------------------+-------------------------+</pre>
+  <h4 class="text-white font-semibold text-base mt-4">Binary Envelope Layout</h4>
+  <pre class="bg-black/40 border border-white/8 rounded-lg p-4 font-mono text-xs text-neutral-200 overflow-x-auto whitespace-pre">+---------------------+--------------------+--------------------+--------------------+---------------------+
+| MAGIC (4 Bytes)     | HEADER_LEN (4B)    | HEADER_MAC (32B)   | HEADER_JSON (NB)   | PAYLOAD BYTES (MB)  |
+| b"AIF\\x04"          | Big-endian u32     | HMAC-SHA256        | Unencrypted JSON   | Block ciphertexts   |
++---------------------+--------------------+--------------------+--------------------+---------------------+</pre>
 
-  <h4 class="text-white font-semibold text-base mt-4">2. Crypotographic Envelope & Security</h4>
-  <p>
-    Authentication uses a keyed Encrypt-then-MAC (EtM) standard. Bulk encryption of context blocks is handled via <strong>AES-256-GCM</strong>. Public key exchanges use post-quantum cryptography (<strong>ML-KEM / Kyber</strong>) to ensure context files are locked to authorized agent identities.
-  </p>
-
-  <h4 class="text-white font-semibold text-base mt-4 font-display-serif italic">The Memory Decay Analogy</h4>
-  <p>
-    Consider how human memory works over time. If you attend a technical lecture today, you remember the exact words, specific slides, and side comments (FP16_RAW). A day later, you forget the side comments and specific words, but you remember the main points and key formulas (INT8). A month later, you only remember the core concept and how it relates to your overall knowledge base (INT2). The temporal decay engine applies this exact hierarchy to agent memory. It reduces the precision of older snapshots on a schedule, dropping auxiliary conversational details while retaining the core logic needed to continue the work.
-  </p>
-
-  <h4 class="text-white font-semibold text-base mt-4">3. Quantization Layers</h4>
-  <p>
-    Continuous attention weights are mapped into low-bit representation buckets:
-  </p>
+  <h4 class="text-white font-semibold text-base mt-4">Cryptographic Details</h4>
   <ul class="list-disc pl-5 space-y-2">
-    <li><code>FP16_RAW</code>: Full-precision, raw embedding vectors. Reserved for high-importance, actively referenced context blocks.</li>
-    <li><code>INT8</code>: 8-bit integer quantization mapping. Used for active, medium-term dialogue context.</li>
-    <li><code>INT2_DEEP_SUMMARY</code>: 2-bit semantic quantization. Applied to ancient historical nodes, storing only high-level concept summaries.</li>
+    <li><strong>Key Splitting:</strong> Master 32-byte key generates independent K_enc and K_mac keys via SHA-256.</li>
+    <li><strong>Block Encryption:</strong> Each block draws a 16-byte random salt, derives a block key, compresses with Gzip, and encrypts with ChaCha20.</li>
+    <li><strong>Integrity:</strong> Encrypt-then-MAC with HMAC-SHA256 over salt + ciphertext. Constant-time checks prevent timing attacks.</li>
+    <li><strong>Keychain:</strong> Keys live in <code>~/.gemini/ai-format/keys/&lt;project&gt;__&lt;model&gt;.key</code> locked to 0600 permissions.</li>
   </ul>
 </div>`,
-    note: "The magic file signature is 'AIF' followed by byte version 0x03. Legacy V1 and V2 files are automatically migrated by the background optimizer."
+    note: "The engine retains full backwards compatibility, reading and upgrading legacy AIF\\x03 files."
   },
-  "Integration guides": {
-    tag: "GUIDE",
-    title: "Runtime Agent Integration",
-    desc: "A step-by-step workflow to integrate the .ai serialization engine and temporal forgetting curves into your agent execution loop.",
+  "Changelog": {
+    tag: "RELEASES",
+    title: "Release Changelog",
+    desc: "Version history and evolutionary milestones of the .ai-format standard.",
     content: `<div class="space-y-6 text-sm text-neutral-300 leading-relaxed font-sans">
-  <p>
-    Wiring the <code>ai-format</code> modules into your autonomous agent ensures state integrity, security, and context efficiency across restarts.
-  </p>
+  <div class="border-l-2 border-coral pl-4">
+    <h4 class="text-white font-semibold text-base font-mono">v4.0.0 (Rust Engine & Orbital Memory Cluster)</h4>
+    <p class="text-xs text-neutral-400 mt-0.5">October 2026</p>
+    <ul class="list-disc pl-5 space-y-1.5 mt-2">
+      <li>Rewrote core engine from Python into a high-performance compiled Rust crate and binary (<code>aif</code>).</li>
+      <li>Implemented three Orbital Gravity Rings (<code>INT16_CORE</code>, <code>INT8_RING</code>, <code>INT2_CRUST</code>).</li>
+      <li>Added Cross-Project Synaptic Bridge (<code>bridge_nexus.ai</code>) with sub-millisecond direct byte-offset retrieval.</li>
+      <li>Introduced Single-Key Project-Model Binding locked to OS-level 0600 permissions.</li>
+      <li>Added interrupt trap daemon (<code>aif scratch</code> + SIGINT/SIGTERM hook) to eliminate lost state on abrupt pauses.</li>
+      <li>Implemented automated IDE rule discovery in <code>aif init</code> for Cursor, Windsurf, Claude Code, and Antigravity.</li>
+      <li>Added one-line curl and PowerShell installer scripts with automated release workflows.</li>
+    </ul>
+  </div>
 
-  <h4 class="text-white font-semibold text-base mt-4">Step 1: Instantiating the Context Engine</h4>
-  <p>
-    Load the AEAD block engine from <code>ai_format_production.py</code> at agent startup. This handles HMAC verification, key checking, and directory setup:
-  </p>
-  <pre class="bg-black/40 border border-white/8 rounded-lg p-4 font-mono text-xs text-coral">
-from ai_format_production import ProductionAIContextFile
+  <div class="border-l-2 border-white/20 pl-4 mt-6">
+    <h4 class="text-white font-semibold text-base font-mono">v3.0.0 (Block-Based AEAD & Lazy Loading)</h4>
+    <p class="text-xs text-neutral-400 mt-0.5">June 2026</p>
+    <ul class="list-disc pl-5 space-y-1.5 mt-2">
+      <li>Partitioned context files into independent logical blocks with HMAC-verified structural headers.</li>
+      <li>Implemented partial envelope unpacking to allow selective block reads via byte seek.</li>
+      <li>Introduced initial temporal decay formulas and autonomous background optimization scripts.</li>
+    </ul>
+  </div>
 
-key = b"super_secret_agent_identity_key_32b"
-engine = ProductionAIContextFile(master_key_bytes=key)</pre>
+  <div class="border-l-2 border-white/20 pl-4 mt-6">
+    <h4 class="text-white font-semibold text-base font-mono">v2.0.0 (Temporal Attention Model)</h4>
+    <p class="text-xs text-neutral-400 mt-0.5">June 2026</p>
+    <ul class="list-disc pl-5 space-y-1.5 mt-2">
+      <li>Added temporal memory decay with exponential Ebbinghaus forgetting curves.</li>
+      <li>Introduced three attention-based quantization tiers (FP16_RAW, INT8, and INT2).</li>
+    </ul>
+  </div>
 
-  <h4 class="text-white font-semibold text-base mt-4 font-display-serif italic">The Video Game Checkpoint Analogy</h4>
-  <p>
-    Think of integrating this SDK like adding a save-game feature to a role-playing game. When you save your progress in a game, the system does not write down every battle, step, and dialogue line you have experienced. Instead, it saves a snapshot containing your coordinates, items in your inventory, and a list of completed quests. When you load the game, you resume immediately from that spot. The ai-format SDK does the same for your agent: it saves the current task list, variables, and goal tree, allowing the agent to resume instantly without repeating the entire conversation.
-  </p>
-
-  <h4 class="text-white font-semibold text-base mt-4">Step 2: Executing the Serialization Loop</h4>
-  <p>
-    Hook the save script into your execution milestones (e.g. after a task is finished or during process cleanup):
-  </p>
-  <pre class="bg-black/40 border border-white/8 rounded-lg p-4 font-mono text-xs text-coral">
-try:
-    # Run agent execution steps
-    agent.execute_cycle()
-    
-    # Save checkpoint state upon success
-    engine.serialize(metadata, payload, "checkpoints/milestone_1.ai")
-except Exception as e:
-    # Recover state instantly from last known checkpoint
-    metadata, payload = engine.deserialize("checkpoints/milestone_1.ai")</pre>
-
-  <h4 class="text-white font-semibold text-base mt-4">Step 3: Background Optimizer Daemon</h4>
-  <p>
-    Run the <code>autonomous_optimizer.py</code> script as a background daemon process. It periodically runs forgetting curves (<code>ai_format_temporal.py</code>) on inactive checkpoint files to compress their payload.
-  </p>
+  <div class="border-l-2 border-white/20 pl-4 mt-6">
+    <h4 class="text-white font-semibold text-base font-mono">v1.0.0 (Initial Prototype)</h4>
+    <p class="text-xs text-neutral-400 mt-0.5">June 2026</p>
+    <ul class="list-disc pl-5 space-y-1.5 mt-2">
+      <li>Initial concept and prototype for encrypted cognitive snapshots for LLM agents.</li>
+    </ul>
+  </div>
 </div>`,
-    note: "All files inside the checkpoints directory are encrypted. The symmetric decryption keys are managed automatically using your OS-restricted AppData keyring folder."
-  },
-  "API reference": {
-    tag: "API",
-    title: "Framework API & Signatures",
-    desc: "Complete documentation of the save, load, decay, and link methods exposed by the core Python scripts.",
-    content: `<div class="space-y-6 text-sm text-neutral-300 leading-relaxed font-sans">
-  <p>
-    This reference covers the API primitives and method signatures used to interact with the AIF_V3 serialization container.
-  </p>
-
-  <h4 class="text-white font-semibold text-base mt-4">1. save_context(transcript, key_path, output_path)</h4>
-  <p>
-    Serializes active memory, runs quantization algorithms, creates the AIF_V3 block layout, and signs the envelope.
-  </p>
-  <pre class="bg-black/40 border border-white/8 rounded-lg p-4 font-mono text-xs text-coral">
-def serialize(
-    metadata: dict,
-    payload_data: dict,
-    output_path: str
-) -> int</pre>
-  <p>
-    Returns the file size in bytes. Throws PermissionError if the HMAC signature check fails.
-  </p>
-
-  <h4 class="text-white font-semibold text-base mt-4 font-display-serif italic">The Library Index Analogy</h4>
-  <p>
-    Think of the ProductionAIContextFile class like a library index. When you request a book, the librarian does not read every index card in the building. They look up the unique catalog number to retrieve the book directly. The <code>read_header</code> and <code>deserialize_block</code> methods perform this catalog search, verifying that the file path is correct and retrieving the data directly without reading unrelated files.
-  </p>
-
-  <h4 class="text-white font-semibold text-base mt-4">2. load_context(key_path, block_name)</h4>
-  <p>
-    Implements partial envelope unpacking (lazy loading). Reads the HMAC-verified header index, and decrypts only the requested block bytes.
-  </p>
-  <pre class="bg-black/40 border border-white/8 rounded-lg p-4 font-mono text-xs text-coral">
-def deserialize_block(
-    input_path: str,
-    block_id: str
-) -> tuple</pre>
-
-  <pre class="bg-black/40 border border-white/8 rounded-lg p-4 font-mono text-xs text-coral">
-def optimize_context_file(
-    file_path: str,
-    active_keywords: list = None
-) -> bool</pre>
-  <p>
-    Decays low-attention blocks, and links sequential files into a directed acyclic graph (DAG) using cryptographic hash pointers.
-  </p>
-</div>`,
-    note: "API methods are synchronous by default in Python, but leverage background threading in C++ bindings to ensure zero blocking on primary LLM threads."
-  },
-  Changelog: {
-    tag: "LOG",
-    title: "Version History & Releases",
-    desc: "Detailed changelog tracking the format's evolution from prototypes to version 3.0.0.",
-    content: `<div class="space-y-6 text-sm text-neutral-300 leading-relaxed font-sans">
-  <p>
-    This log tracks releases and modifications for the <strong>ai-format</strong> library.
-  </p>
-
-  <h4 class="text-white font-semibold text-base mt-4">v3.0.0 (Production Release)</h4>
-  <ul class="list-disc pl-5 space-y-2">
-    <li>Added AIF_V3 block-based serialization layout to support selective decryption.</li>
-    <li>Implemented Partial Envelope Unpacking (lazy loading) to reduce CPU overhead.</li>
-    <li>Added support for neural graph connectivity and cryptographic DAG tracking.</li>
-    <li>Integrated ML-KEM / Kyber post-quantum cryptography keyrings.</li>
-  </ul>
-
-  <h4 class="text-white font-semibold text-base mt-4 font-display-serif italic">The Blueprint Analogy</h4>
-  <p>
-    Consider the difference between a rough hand-drawn sketch and a detailed architectural blueprint. A sketch is quick to draw but lacks precision, and different people will interpret it differently. A blueprint uses standardized symbols, exact dimensions, and clear labels so that any contractor can build the structure identically. In this changelog, each release represents a refinement of our blueprint, turning initial rough ideas into a standardized, reliable specification for cognitive context persistence.
-  </p>
-
-  <h4 class="text-white font-semibold text-base mt-4">v2.0.0 (Temporal Update)</h4>
-  <ul class="list-disc pl-5 space-y-2">
-    <li>Added temporal memory decay with exponential Ebbinghaus forgetting curves.</li>
-    <li>Introduced the three attention-based quantization tiers (FP16_RAW, INT8, and INT2).</li>
-  </ul>
-</div>`,
-    note: "Please update your local environment execution wrappers to ensure full V3 compatibility."
+    note: "Upgrading from V3 is automatic. Running 'aif optimize' migrates existing files to AIF\\x04."
   }
 };
 
 export default function DocPortal() {
-  const [activeTab, setActiveTab] = useState("SDKs & clients");
-  const doc = DOCS_DATA[activeTab];
+  const [activeTab, setActiveTab] = useState("Quick Start");
+  const doc = DOCS_DATA[activeTab] || DOCS_DATA["Quick Start"];
 
   return (
     <section id="docs" className="relative py-20 sm:py-28">
@@ -273,7 +256,7 @@ export default function DocPortal() {
             className="mt-5 text-3xl font-bold tracking-tight text-white sm:text-4xl font-display-sans"
           />
           <ScrollWordReveal
-            text="The portal provides integration guides, API references, and the full format specification. Click through the preview below to explore the SDK."
+            text="Explore the AIF V4 Rust CLI, orbital memory hierarchy, cross-project bridge, and the full binary specification."
             className="mt-4 text-base leading-relaxed text-neutral-400"
           />
         </Reveal>

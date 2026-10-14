@@ -2,19 +2,19 @@ import { Container, Eyebrow, Icon } from "./ui";
 
 function Pipeline() {
   const tiers = [
-    { tag: "FP16_RAW", note: "100% detail", w: "w-[34%]" },
-    { tag: "INT8", note: "quantized", w: "w-[20%]" },
-    { tag: "INT2", note: "semantic", w: "w-[10%]" },
+    { tag: "INT16_CORE", note: "Red Core (>=0.70)", w: "w-[40%]" },
+    { tag: "INT8_RING", note: "Pruned (0.30-0.69)", w: "w-[24%]" },
+    { tag: "INT2_CRUST", note: "Gist Summary (<0.30)", w: "w-[12%]" },
   ];
   return (
     <div className="card w-full max-w-2xl p-4 sm:p-5">
       <div className="mb-3 flex items-center justify-between">
         <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-neutral-500">
-          snapshot checkpoint
+          AIF V4 Orbital Gravity Rings
         </span>
         <span className="inline-flex items-center gap-1.5 text-[11px] text-neutral-400">
           <span className="pulse-dot h-1.5 w-1.5 rounded-full bg-coral" />
-          signed · post-quantum
+          ChaCha20 · HMAC-SHA256 · Sub-ms Seek
         </span>
       </div>
 

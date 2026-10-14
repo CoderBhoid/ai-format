@@ -13,37 +13,37 @@ const BENEFITS: {
   {
     icon: "shield",
     title: "Cryptographic security",
-    desc: "Snapshots are secured against unauthorized access using localized credential wrapping at every checkpoint.",
+    desc: "ChaCha20 streaming AEAD and HMAC-SHA256 with 0600 file permissions prevent tampering.",
   },
   {
     icon: "clock",
-    title: "Temporal decay",
-    desc: "Recent detail is kept lossless while the distant past condenses automatically on a schedule.",
+    title: "Orbital gravity rings",
+    desc: "Self-evaluated attention scores partition memories into Red Core, Middle Ring, and Outer Crust.",
+  },
+  {
+    icon: "hub",
+    title: "Cross-project bridge",
+    desc: "Seek directly to core architectural decisions in neighboring repositories in under 1 millisecond.",
   },
   {
     icon: "checkpoint",
-    title: "Pre-flight checkpoints",
-    desc: "Snapshot state before migrations or destructive commands for safe, one-step rollback.",
-  },
-  {
-    icon: "handoff",
-    title: "Clean agent handoff",
-    desc: "Pass a single signed snapshot to another agent for unambiguous, verifiable continuation.",
+    title: "Interrupt protection",
+    desc: "Flushes in-flight working state to INT16_CORE on sudden SIGINT or terminal pauses.",
   },
   {
     icon: "key",
-    title: "Automatic credentials",
-    desc: "Keys are generated and rotated for you, requiring no manual cryptography to wire up or audit.",
+    title: "Single-key binding",
+    desc: "Deterministic 256-bit AEAD key per project and model stored in restricted local keychains.",
   },
   {
     icon: "gem",
-    title: "Lossless recent detail",
-    desc: "Context under an hour is preserved at FP16_RAW, which is one hundred percent intact.",
+    title: "Stop-word pruning",
+    desc: "Middle ring prunes routine helper words automatically to save prompt context window tokens.",
   },
   {
     icon: "compress",
-    title: "Lean ancient payloads",
-    desc: "Older sessions collapse to INT2 semantic concepts, keeping storage and load cost tiny.",
+    title: "Sub-millisecond seek",
+    desc: "Partial envelope unpacking reads and authenticates requested blocks without loading entire archives.",
   },
 ];
 
@@ -80,11 +80,11 @@ export default function Benefits() {
           <Eyebrow>why .ai</Eyebrow>
           <ScrollWordReveal
             as="h2"
-            text="Engineered for agents that run long."
+            text="Engineered for autonomous cognitive persistence."
             className="mt-5 text-3xl font-bold tracking-tight text-white sm:text-4xl font-display-sans"
           />
           <ScrollWordReveal
-            text="Eight reasons teams standardize on the .ai-format format instead of fragile text dumps, ranging from signed checkpoints to automatic credential management."
+            text="Eight core capabilities that separate AIF V4 from fragile text logs, from sub-millisecond bridge seeks to automated interrupt recovery."
             className="mt-4 text-base leading-relaxed text-neutral-400"
           />
         </Reveal>

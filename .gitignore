@@ -29,3 +29,10 @@ website/build/
 .env
 .env.local
 .env.*.local
+.aif_config.json
+.scratch_state.tmp
+
+# Rust build artifacts
+target/
+**/*.rs.bk
+*.key

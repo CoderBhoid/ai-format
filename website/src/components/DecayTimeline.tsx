@@ -12,28 +12,28 @@ type Stage = {
 
 const STAGES: Stage[] = [
   {
-    key: "FP16_RAW",
-    age: "Under 1 hour",
+    key: "INT16_CORE",
+    age: "Attention >= 0.70",
     retention: 100,
     cost: "1.00×",
-    title: "Fresh context",
-    desc: "Saved verbatim at full precision. Every token, intent, and decision is preserved with nothing thrown away.",
+    title: "Red Core (High Priority)",
+    desc: "Saved verbatim at full precision. Core architecture choices, critical schemas, and interrupted states. Preloaded on boot and linked to Bridge Nexus.",
   },
   {
-    key: "INT8",
-    age: "1 hour – 1 day",
+    key: "INT8_RING",
+    age: "Attention 0.30 to 0.69",
     retention: 58,
     cost: "0.41×",
-    title: "Medium-term context",
-    desc: "Redundant helper tokens are pruned and the remainder quantized to INT8. Meaning stays intact, bulk drops away.",
+    title: "Middle Ring (Working Context)",
+    desc: "Stop words and helper words pruned. Meaning remains intact while reducing token consumption.",
   },
   {
-    key: "INT2",
-    age: "Beyond 1 day",
+    key: "INT2_CRUST",
+    age: "Attention < 0.30",
     retention: 12,
     cost: "0.06×",
-    title: "Ancient context",
-    desc: "Condensed into high-level INT2 semantic concepts. Only the distilled gist remains signed and compact.",
+    title: "Outer Crust (Gist Summaries)",
+    desc: "Condensed into ultra-compact gist summaries. Keeps storage and load overhead negligible.",
   },
 ];
 
