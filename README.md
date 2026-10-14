@@ -24,19 +24,22 @@
 
 ## What is AIF V4?
 
-AIF (`.ai`) is an authenticated, block-partitioned cognitive memory engine for autonomous AI coding agents. 
+AIF (`.ai`) is an authenticated, block-partitioned cognitive memory engine for autonomous AI coding agents.
 
-Standard agent sessions suffer from context window saturation, repetitive input-prefill token costs, lost states on user interrupts, and memory silos between different projects. AIF V4 replaces raw flat text logs with a compiled Rust engine (`aif`) featuring:
+Standard agent sessions suffer from context window saturation, repetitive input-prefill token costs, lost states on user interrupts, and memory silos between projects. AIF V4 replaces raw flat text logs with a compiled Rust engine (`aif`).
 
-- **Single-Key Deterministic Binding**: 256-bit AEAD key per `(project, model)` stored in restricted local keychains (`0600` permissions).
-- **Three Orbital Gravity Rings**: `INT16_CORE` ($\ge 0.7$), `INT8_RING` ($0.3-0.69$ with stop-word pruning), and `INT2_CRUST` ($< 0.3$ with gist summaries).
-- **Cross-Project Synaptic Bridge**: Direct byte-offset seek to core decisions in other repositories in sub-millisecond time.
-- **Interrupt Protection**: Flushes in-flight work to `INT16_CORE` with priority `0.95` on `SIGINT`/`SIGTERM`/abrupt stop.
+### Key Pillars
+
+- **Single Device Master Key**: All projects on the machine share a unified 256-bit AEAD key (`~/.gemini/ai-format/keys/aif_device.key`) restricted to `0600` permissions on Unix.
+- **Three Orbital Gravity Rings**: `INT16_CORE` ($S_{attn} \ge 0.7$), `INT8_RING` ($0.30 \le S_{attn} < 0.70$ with stop-word pruning), and `INT2_CRUST` ($S_{attn} < 0.30$ with gist summaries).
+- **Cross-Project Synaptic Bridge**: Query memories across different repositories in sub-millisecond time via byte-offset pointers.
+- **Zero-Token Git Hook Automation**: `aif init` installs a `.git/hooks/post-commit` script. Every commit is automatically indexed into `INT16_CORE` with zero prompt tokens and zero tool calls.
+- **Interrupt Protection**: Flushes in-flight work to `INT16_CORE` with priority `0.95` on `Ctrl+C`, `SIGINT`, or `SIGTERM`.
 - **Partial Envelope Unpacking**: Verifies and decrypts requested memory blocks without loading entire files into memory.
 
 ---
 
-## ⚡ Instant Setup: Choose Your Method
+## Quick Setup
 
 ### Method 1: The One-Line Terminal Installer
 
@@ -76,7 +79,7 @@ Follow these exact steps:
 2. Initialize Workspace Memory:
    - In my current workspace, run:
      aif init --project "$(basename "$PWD")" --model "default"
-   - Verify that <project>.ai and ~/.gemini/ai-format/bridge_nexus.ai are created.
+   - Verify that <project>.ai, .git/hooks/post-commit, and ~/.gemini/ai-format/bridge_nexus.ai are created.
 
 3. Configure Global Agent Instructions:
    - Locate my global agent instruction file (e.g. ~/.gemini/config/AGENTS.md, ~/.cursorrules, ~/.claude/CLAUDE.md, or .agents/AGENTS.md).
@@ -91,6 +94,7 @@ Follow these exact steps:
         - Score 0.30 - 0.69: Working turn notes (Middle Ring, stop words pruned).
         - Score < 0.30: Fleeting observations (Outer Crust, deep summaries).
      4. Cross-Project Context: When information from another repository is needed, run `aif bridge --query "<topic>"`.
+     5. Git Milestone Capture: Commits are automatically captured into memory by the native git post-commit hook.
      """
 
 4. Verification:
@@ -103,15 +107,41 @@ Follow these exact steps:
 
 ### Method 3: Manual Developer Build
 
-If you prefer building manually from source:
-
 ```bash
 git clone https://github.com/CoderBhoid/ai-format.git
 cd ai-format
 cargo test
 cargo build --release
-./ai.sh init --project my_project --model claude-3-7-sonnet
+./ai.sh init --project my_project --model default
 ```
+
+---
+
+## Memory Automation and Discipline
+
+AIF V4 provides two complementary mechanisms for memory persistence.
+
+### 1. Zero-Token Git Post-Commit Hook
+When `aif init` runs in a git repository, it writes an executable hook to `.git/hooks/post-commit`:
+```sh
+#!/bin/sh
+MSG=$(git log -1 --pretty=%s 2>/dev/null)
+if [ -n "$MSG" ]; then
+  aif note --project <project> --importance 0.85 --summary "Git commit: $MSG" --tags "git,commit" >/dev/null 2>&1 || true
+fi
+```
+Every time code is committed, Git invokes `aif note` automatically.
+This captures project progress into `INT16_CORE` without consuming prompt tokens or agent tool calls.
+
+### 2. Agent Turn Self-Scoring & User Reminder
+During active conversations, the agent self-evaluates each turn:
+```bash
+aif note --project <project> --importance 0.85 --summary "<what was decided>"
+```
+If an agent becomes absorbed in complex debugging or multi-file refactoring, users can remind it:
+> *"Remember to note in .ai"*
+
+This prompts the agent to flush its working conclusions to disk.
 
 ---
 
@@ -141,29 +171,30 @@ Each project stores memory blocks in `<project_id>.ai`. Blocks are grouped into 
 
 - **Red Core (`INT16_CORE` / `FP16_RAW`, $S_{attn} \ge 0.7$)**:
   High-importance architectural decisions, interrupted states, and critical schemas. Loaded automatically on session start and indexed in the Cross-Project Bridge.
-- **Black Middle Ring (`INT8_RING`, $0.3 \le S_{attn} < 0.7$)**:
+- **Black Middle Ring (`INT8_RING`, $0.30 \le S_{attn} < 0.70$)**:
   Routine turn notes and working memory. Helper and stop words are pruned to save tokens while preserving semantic intent. Lazy-loaded on demand via byte-range `Seek`.
-- **Blue Outer Crust (`INT2_CRUST` / `INT2_DEEP_SUMMARY`, $S_{attn} < 0.3$)**:
+- **Blue Outer Crust (`INT2_CRUST` / `INT2_DEEP_SUMMARY`, $S_{attn} < 0.30$)**:
   Fleeting thoughts and temporally decayed memories compressed into compact gist summaries.
 
 ### 2. Cross-Project Synaptic Bridge (`bridge_nexus.ai`)
-The master bridge index lives at `~/.gemini/ai-format/bridge_nexus.ai`. It records each project's file path, topic tags, and direct byte-offset pointers to Red Core (`INT16_CORE`) blocks.
+The master bridge index lives at `~/.gemini/ai-format/bridge_nexus.ai`. It records each project's canonical path, topic tags, and direct byte-offset pointers to Red Core (`INT16_CORE`) blocks.
 
 When an agent in Project B queries context from Project A:
 ```bash
-./ai.sh bridge --query "authentication"
+aif bridge --query "authentication"
 ```
 The engine inspects the bridge index, seeks directly to Project A's `INT16_CORE` byte offset, verifies the block HMAC, and decrypts the memory in sub-millisecond time (<1ms) without unpacking outer rings.
 
 ### 3. Interrupt Trap & Scratch Buffer
 Agents write in-flight intent to `.scratch_state.tmp` before long commands:
 ```bash
-./ai.sh scratch "Migrating schema: added accounts table"
+aif scratch "Migrating database schema: adding accounts table"
 ```
-If the user terminates the session (`Ctrl+C`, `SIGINT`, `SIGTERM`), the signal handler immediately commits the scratch text into active project `INT16_CORE` with importance `0.95` and the `[PAUSED_MID_TASK]` marker before exiting.
+If the process terminates (`Ctrl+C`, `SIGINT`, `SIGTERM`), the signal handler immediately commits the scratch text into active project `INT16_CORE` with importance `0.95` and the `[PAUSED_MID_TASK]` marker before exiting.
 
 ### 4. Cryptographic Guarantees
-- **Key Derivation**: SHA-256 key splitting derives independent encryption ($K_{enc}$) and authentication ($K_{mac}$) keys from a 32-byte master key.
+- **Unified Keychain**: All repositories on the system use the device key at `~/.gemini/ai-format/keys/aif_device.key` (`0600` permissions).
+- **Key Derivation**: SHA-256 key splitting derives independent encryption ($K_{enc}$) and authentication ($K_{mac}$) keys from the 32-byte master key.
 - **Cipher**: ChaCha20 stream cipher with unique 16-byte random salts per block.
 - **Authentication**: Encrypt-then-MAC using HMAC-SHA256 over `salt + ciphertext` and over the structural JSON header.
 - **Side-Channel Protection**: Constant-time MAC comparison prevents timing attacks.
@@ -173,7 +204,7 @@ If the user terminates the session (`Ctrl+C`, `SIGINT`, `SIGTERM`), the signal h
 ## Detailed Command Manual
 
 ### 1. `aif init`
-Initializes a new project container and generates a deterministic 256-bit AEAD key in the local keychain. Scans the workspace and home directory for AI harness configuration files (`.cursorrules`, `CLAUDE.md`, `AGENTS.md`, Windsurf) and appends the standard memory loop automatically.
+Initializes a new project container and generates a deterministic 256-bit AEAD key in the local keychain. Installs the automatic `.git/hooks/post-commit` hook if a git repository is detected. Scans the workspace and home directory for AI harness configuration files (`.cursorrules`, `CLAUDE.md`, `AGENTS.md`, Windsurf) and appends the standard memory loop.
 
 ```bash
 aif init --project <project_name> --model <model_id>
@@ -194,11 +225,6 @@ aif note --project <project> --importance <0.0-1.0> --summary "<text>" [--tags "
 - `--tags`, `-t`: Comma-separated list of topic tags.
 - `--content`, `-c`: Optional full-length content (defaults to summary).
 
-*Example:*
-```bash
-aif note --project backend --importance 0.92 --summary "Switched JWT verification to RSA-256" --tags "auth,jwt,security"
-```
-
 ---
 
 ### 3. `aif recall`
@@ -214,11 +240,6 @@ aif recall [--core-and-bridge] [--all] [--query <term>] [--block <id>] [--vars] 
 - `--header`: Validates HMAC and prints unencrypted header JSON without decrypting payload blocks.
 - `--all`: Dumps and authenticates all blocks in the file.
 
-*Example:*
-```bash
-aif recall --query "JWT"
-```
-
 ---
 
 ### 4. `aif bridge`
@@ -231,11 +252,6 @@ aif bridge [--query "<term>"] [--project <project_name>] [--reindex]
 - `--project`, `-p`: Scope search to a specific external project.
 - `--reindex`: Forces re-indexing of all Red Core blocks for the active project.
 
-*Example:*
-```bash
-aif bridge --query "database schema"
-```
-
 ---
 
 ### 5. `aif scratch`
@@ -245,11 +261,6 @@ Writes in-flight intent, active step progress, and volatile variables to `.scrat
 aif scratch "<current step and in-flight variables>"
 ```
 
-*Example:*
-```bash
-aif scratch "Running database migration on production schema"
-```
-
 ---
 
 ### 6. `aif reweight`
@@ -257,11 +268,6 @@ Manually adjusts the importance score of an existing memory block. Dynamically r
 
 ```bash
 aif reweight --block <block_id> --importance <0.0-1.0> [--project <project>]
-```
-
-*Example:*
-```bash
-aif reweight --block note_1720000000_0 --importance 0.95
 ```
 
 ---
@@ -276,11 +282,6 @@ aif optimize [--delta <decay_rate>] [--keywords "<kw1,kw2>"] [--project <project
 ```
 - `--delta`, `-d`: Temporal decay step (default: 0.05).
 - `--keywords`, `-k`: Active keywords to boost relevance and resist decay.
-
-*Example:*
-```bash
-aif optimize --delta 0.05 --keywords "auth,database"
-```
 
 ---
 
@@ -302,17 +303,16 @@ aif watch [--project <project>] [--model <model>]
 ├── ai.bat                      # Windows wrapper script (auto-builds release)
 ├── install.sh                  # One-line POSIX installer
 ├── install.ps1                 # One-line Windows PowerShell installer
-├── .github/
-│   └── workflows/
-│       └── release.yml         # Multi-platform pre-compiled binary builder
+├── ci/
+│   └── release.yml             # Multi-platform release workflow recipe
 ├── src/
 │   ├── lib.rs                  # Module exports
-│   ├── crypto.rs               # Keychain, ChaCha20, V3 stream cipher, HMAC-SHA256
+│   ├── crypto.rs               # Keychain, ChaCha20, stream cipher, HMAC-SHA256
 │   ├── orbital.rs              # AIF\x04 binary parser, 3 orbital rings, partial unpack
 │   ├── bridge.rs               # bridge_nexus.ai cross-project router
 │   ├── interrupt.rs            # Scratch buffer and SIGINT/SIGTERM trap
 │   ├── config.rs               # Workspace config & IDE auto-detection
-│   └── main.rs                 # Clap CLI parser
+│   └── main.rs                 # Clap CLI parser with git hook installer
 ├── tests/
 │   └── integration_v4.rs       # Comprehensive integration test suite (5/5 passing)
 ├── agentic-skill/

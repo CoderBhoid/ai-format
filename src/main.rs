@@ -147,6 +147,25 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             let _ = save_config(&new_cfg);
             println!("[+] Initialized configuration and bridge nexus.");
 
+            let git_hook_path = std::path::PathBuf::from(".git").join("hooks").join("post-commit");
+            if std::path::Path::new(".git").exists() && !git_hook_path.exists() {
+                let hook_content = format!(
+                    "#!/bin/sh\n# AIF Auto-Commit Hook\nMSG=$(git log -1 --pretty=%s 2>/dev/null)\nif [ -n \"$MSG\" ]; then\n  aif note --project {} --importance 0.85 --summary \"Git commit: $MSG\" --tags \"git,commit\" >/dev/null 2>&1 || true\nfi\n",
+                    new_cfg.default_project
+                );
+                if let Some(parent) = git_hook_path.parent() {
+                    let _ = std::fs::create_dir_all(parent);
+                }
+                if std::fs::write(&git_hook_path, hook_content).is_ok() {
+                    #[cfg(unix)]
+                    {
+                        use std::os::unix::fs::PermissionsExt;
+                        let _ = std::fs::set_permissions(&git_hook_path, std::fs::Permissions::from_mode(0o755));
+                    }
+                    println!("[+] Installed automatic git post-commit memory hook in .git/hooks/post-commit");
+                }
+            }
+
             let injected = auto_detect_and_inject_ide_rules();
             if !injected.is_empty() {
                 println!("[+] Automatically injected memory lifecycle rules into:");
