@@ -80,6 +80,7 @@ Follow these exact steps:
    - In my current workspace, run:
      aif init --project "$(basename "$PWD")" --model "default"
    - Verify that <project>.ai, .git/hooks/post-commit, and ~/.gemini/ai-format/bridge_nexus.ai are created.
+   - Confirm that the shell auto-save exit trap is active in ~/.bashrc or ~/.zshrc.
 
 3. Configure Global Agent Instructions:
    - Locate my global agent instruction file (e.g. ~/.gemini/config/AGENTS.md, ~/.cursorrules, ~/.claude/CLAUDE.md, or .agents/AGENTS.md).
@@ -133,7 +134,15 @@ fi
 Every time code is committed, Git invokes `aif note` automatically.
 This captures project progress into `INT16_CORE` without consuming prompt tokens or agent tool calls.
 
-### 2. Agent Turn Self-Scoring & User Reminder
+### 2. Automatic Shell / App Close Exit Trap
+When `aif init` runs, it registers an auto-save exit trap in `~/.bashrc` and `~/.zshrc`:
+```sh
+trap 'if [ -f .aif_config.json ] && command -v aif >/dev/null 2>&1; then aif note --importance 0.90 --summary "Workspace session closed" --tags "lifecycle,auto-save" >/dev/null 2>&1; fi' EXIT SIGHUP SIGTERM
+```
+Whenever the user closes their terminal tab, exits their shell, or shuts down their IDE, the OS sends an exit signal.
+The trap executes in milliseconds and checkpoints the session into `AIF.ai`.
+
+### 3. Agent Turn Self-Scoring & User Reminder
 During active conversations, the agent self-evaluates each turn:
 ```bash
 aif note --project <project> --importance 0.85 --summary "<what was decided>"

@@ -166,6 +166,24 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 }
             }
 
+            if let Some(home) = dirs::home_dir() {
+                for rc_name in [".bashrc", ".zshrc"] {
+                    let rc_path = home.join(rc_name);
+                    if rc_path.exists() {
+                        if let Ok(content) = std::fs::read_to_string(&rc_path) {
+                            if !content.contains("aif note --importance 0.90 --summary \"Workspace session closed\"") {
+                                let trap_line = "\n# AIF V4 Auto-Save Exit Trap\ntrap 'if [ -f .aif_config.json ] && command -v aif >/dev/null 2>&1; then aif note --importance 0.90 --summary \"Workspace session closed\" --tags \"lifecycle,auto-save\" >/dev/null 2>&1; fi' EXIT SIGHUP SIGTERM\n";
+                                use std::io::Write;
+                                if let Ok(mut f) = std::fs::OpenOptions::new().append(true).open(&rc_path) {
+                                    let _ = f.write_all(trap_line.as_bytes());
+                                    println!("[+] Injected deterministic auto-save exit trap into {}", rc_path.display());
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
             let injected = auto_detect_and_inject_ide_rules();
             if !injected.is_empty() {
                 println!("[+] Automatically injected memory lifecycle rules into:");
