@@ -1,85 +1,101 @@
 ---
-name: ai-context-saving
-description: "Teaches the agent how to save, recall, bridge, and optimize cognitive context using the high-performance AIF V4 Rust engine with orbital gravity rings, cross-project bridging, and interrupt protection."
+name: aif
+description: Manages persistent cognitive memory and cross-project knowledge using the compiled AIF V4 Rust engine. Use on session start for boot recall, before multi-step tasks to write scratch state, at the end of every turn to commit notes into orbital rings, when querying cross-project memory via the synaptic bridge, or when running temporal memory optimization.
 ---
 
-# AIF V4 Agent Memory & Synaptic Bridge Skill
+# AIF V4 Cognitive Memory & Synaptic Bridge
 
-This skill defines the operational procedures for managing persistent cognitive memory states using the compiled `aif` Rust engine (`AIF\x04`).
-
----
-
-## 1. Quick Start Workflow
-
-```
-+-------------------------------------------------------------------------------+
-| 1. Chat Boot        -->  aif recall --core-and-bridge                         |
-| 2. During Work      -->  aif scratch "<active step / in-flight state>"        |
-| 3. End of Turn      -->  aif note --importance <0.0-1.0> --summary "<action>" |
-| 4. Cross-Project    -->  aif bridge --query "<topic>"                         |
-| 5. Maintenance      -->  aif optimize --delta 0.05                            |
-+-------------------------------------------------------------------------------+
-```
+Operational guide for managing persistent agentic memory states using the compiled `aif` Rust engine (`AIF\x04`).
 
 ---
 
-## 2. Orbital Gravity Rings (`AIF\x04`)
+## When to Use
 
-Memories are partitioned into three concentric orbital rings based on agent self-evaluation:
+- **Session Start**: Always run on turn 1 to recall high-importance architectural context and active task states.
+- **Before Complex or Risky Tasks**: Write scratch state to protect in-flight progress against unexpected cancellation or user interrupts (`Ctrl+C`).
+- **End of Every Turn**: Persist cognitive decisions, API changes, bug fixes, and milestones into orbital rings.
+- **Cross-Project Inquiries**: Query connected repositories through the synaptic bridge (`bridge_nexus.ai`).
+- **Memory Maintenance**: Apply temporal decay and reweight obsolete or elevated memories.
 
-1. **Red Core (`INT16_CORE` / `FP16_RAW`, $S_{attn} \ge 0.7$)**:
-   - Stores architectural decisions, critical project schemas, and interrupted states (`[PAUSED_MID_TASK]`).
-   - Automatically loaded on session initialization and indexed in `bridge_nexus.ai`.
-2. **Black Middle Ring (`INT8_RING`, $0.3 \le S_{attn} < 0.7$)**:
-   - Working memories, implementation details, and turn summaries.
-   - Common helper words and stop words are pruned to save tokens while preserving semantics.
-   - Lazy-loaded on demand via byte-range `Seek` (Partial Envelope Unpacking).
-3. **Blue Outer Crust (`INT2_CRUST` / `INT2_DEEP_SUMMARY`, $S_{attn} < 0.3$)**:
-   - Minor observations and temporally decayed memories.
-   - Ultra-compact gist summaries.
+## When NOT to Use
+
+- Casual conversational banter or one-word clarifying questions with no state change.
+- Environments where `aif` binary is unavailable and cannot be built.
+- Scratch or temporary sandboxes where persistence across sessions is explicitly not desired.
 
 ---
 
-## 3. CLI Command Reference
+## Orbital Gravity Rings
 
-### A. Initialization
-```bash
-./ai.sh init --project <project_id> --model <model_id>
+Memories are partitioned into three concentric rings based on cognitive score ($S_{attn}$):
+
+1. **Red Core (`INT16_CORE` / `FP16_RAW`, $S_{attn} \ge 0.70$)**:
+   - High-importance architectural decisions, schemas, and interrupted checkpoints (`[PAUSED_MID_TASK]`).
+   - Preloaded on boot recall and synchronized to `bridge_nexus.ai`.
+2. **Black Middle Ring (`INT8_RING`, $0.30 \le S_{attn} < 0.70$)**:
+   - Standard turn summaries and implementation notes.
+   - Stop words pruned to conserve tokens while preserving semantic intent.
+3. **Blue Outer Crust (`INT2_CRUST`, $S_{attn} < 0.30$)**:
+   - Ultra-compact gist summaries and decayed memories.
+
+---
+
+## Execution Workflow
+
 ```
-Creates `<project_id>.ai`, generates the deterministic 256-bit AEAD key in `~/.gemini/ai-format/keys/<project_id>__<model_id>.key` with `0600` permissions, registers the project in `bridge_nexus.ai`, and sets workspace defaults.
-
-### B. Boot Recall
-```bash
-./ai.sh recall --core-and-bridge
-```
-Preloads active project `INT16_CORE` blocks and lists cross-project synaptic pointers without touching outer rings.
-
-### C. Write Volatile Scratch State
-```bash
-./ai.sh scratch "Refactoring auth handler and verifying token signature"
-```
-Writes in-flight intent to `.agents/ai-format/.scratch_state.tmp`. On `SIGINT`/`SIGTERM`/abrupt stop, the engine automatically commits this scratch buffer into `INT16_CORE` with importance `0.95`.
-
-### D. End-of-Turn Memory Commit
-```bash
-./ai.sh note --importance 0.85 --summary "Completed Rust rewrite of crypto module" --tags "crypto,aead,rust"
-```
-
-### E. Cross-Project Bridge Query
-```bash
-./ai.sh bridge --query "authentication"
-```
-Performs sub-millisecond Partial Envelope Unpacking directly into the target project's `INT16_CORE` byte offsets without loading outer rings.
-
-### F. Reweight Memory
-```bash
-./ai.sh reweight --block note_1720000000_0 --importance 0.90
++--------------------------------------------------------------------------------+
+| 1. Boot Recall      -->  aif recall --core-and-bridge                          |
+| 2. In-Flight Work   -->  aif scratch "<active goal and variables>"             |
+| 3. Turn Commit      -->  aif note --importance <0.0-1.0> --summary "<action>"  |
+| 4. Cross-Project    -->  aif bridge --query "<topic>"                          |
+| 5. Maintenance      -->  aif optimize --delta 0.05                             |
++--------------------------------------------------------------------------------+
 ```
 
-### G. Autonomous Temporal Optimization
+---
+
+## CLI Command Reference
+
+### 1. Workspace Initialization
 ```bash
-./ai.sh optimize --delta 0.05 --keywords "auth,crypto"
+aif init --project "<project_name>" --model "default"
+```
+Creates `<project_name>.ai`, initializes the 256-bit AEAD key in `~/.gemini/ai-format/keys/`, registers the project in `bridge_nexus.ai`, and installs the git post-commit hook.
+
+### 2. Boot Recall
+```bash
+aif recall --core-and-bridge
+```
+Preloads active project `INT16_CORE` blocks and lists cross-project bridge pointers.
+
+### 3. Volatile Scratch (Interrupt Defense)
+```bash
+aif scratch "Refactoring auth handler and verifying token signature"
+```
+Writes active intent to the volatile scratch buffer. On `SIGINT`, `SIGTERM`, or abrupt stop, the signal trap automatically flushes this buffer into `INT16_CORE` with importance `0.95`.
+
+### 4. Turn Memory Commit
+```bash
+aif note --importance 0.85 --summary "Completed Rust rewrite of crypto module" --tags "crypto,aead,rust"
+```
+Commits the turn's summary into the appropriate orbital ring.
+
+### 5. Cross-Project Bridge Query
+```bash
+aif bridge --query "authentication"
+```
+Performs partial envelope unpacking across linked projects via byte-offset pointers.
+
+### 6. Dynamic Memory Reweighting
+```bash
+aif reweight --block note_1720000000_0 --importance 0.90
+```
+Updates the importance of a block and dynamically migrates it between orbital rings.
+
+### 7. Temporal Optimization & Decay
+```bash
+aif optimize --delta 0.05 --keywords "auth,crypto"
 ```
 Applies Ebbinghaus temporal decay:
 $$S_{attn}^{(t)} = \max(0, S_{attn}^{(t-1)} - \delta) + \text{keyword\_boost}$$
-Migrates blocks across rings and upgrades legacy `AIF\x03` files to `AIF\x04`.
+Migrates decayed blocks outward to conserve context space.

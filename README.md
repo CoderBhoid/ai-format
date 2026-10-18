@@ -59,10 +59,10 @@ irm https://ai.sednium.com/install.ps1 | iex
 
 ### Method 2: The Universal Agent Migration Prompt
 
-Copy and paste this instruction block into Cursor, Claude Code, Antigravity, Windsurf, Copilot, or ChatGPT. Your agent will clone the repository, build the Rust binary, configure your global agent rules, and initialize persistent memory automatically:
+Copy and paste this instruction block into Cursor, Claude Code, Antigravity, Windsurf, Copilot, or ChatGPT. Your agent will clone the repository, build the Rust binary, configure your global agent rules, register the Antigravity plugin, and initialize persistent cognitive memory automatically:
 
 ```text
-You are an expert systems engineer. Your task is to install the AIF V4 (ai-format) memory engine on this machine, integrate its memory lifecycle into my global agent rules, and initialize cognitive persistence.
+You are an expert systems engineer. Your task is to install the AIF V4 (ai-format) cognitive memory engine on this machine, integrate its memory lifecycle into my global agent rules and Antigravity plugin hierarchy, and initialize cognitive persistence across all execution harnesses.
 
 Follow these exact steps:
 
@@ -75,6 +75,7 @@ Follow these exact steps:
    - Symlink or copy the binary to a directory in PATH:
      mkdir -p ~/.local/bin && ln -sf ~/.ai-format/target/release/aif ~/.local/bin/aif
      (or run ./ai.sh from ~/.ai-format).
+   - Verify `aif --help` executes successfully.
 
 2. Initialize Workspace Memory:
    - In my current workspace, run:
@@ -82,27 +83,75 @@ Follow these exact steps:
    - Verify that <project>.ai, .git/hooks/post-commit, and ~/.gemini/ai-format/bridge_nexus.ai are created.
    - Confirm that the shell auto-save exit trap is active in ~/.bashrc or ~/.zshrc.
 
-3. Configure Global Agent Instructions:
-   - Locate my global agent instruction file (e.g. ~/.gemini/config/AGENTS.md, ~/.cursorrules, ~/.claude/CLAUDE.md, or .agents/AGENTS.md).
-   - Append the following mandatory operating loop:
+3. Install Antigravity Plugin & Global Skills (if ~/.gemini/ exists):
+   - To guarantee that AIF is never bypassed by other plugins (e.g., agystack / poteto-mode), install AIF as a first-class Antigravity plugin so Antigravity loads it directly into <user_rules>:
+     a) Create plugin folders:
+        mkdir -p ~/.gemini/config/plugins/aif/rules
+        mkdir -p ~/.gemini/config/plugins/aif/skills/aif
+        mkdir -p ~/.gemini/config/plugins/aif/skills/ai-context-saving
+        mkdir -p ~/.gemini/config/skills/aif
+        mkdir -p ~/.gemini/config/skills/ai-context-saving
+
+     b) Create ~/.gemini/config/plugins/aif/plugin.json:
+        {
+          "$schema": "https://antigravity.google/schemas/v1/plugin.json",
+          "name": "aif",
+          "displayName": "AIF Cognitive Memory & Synaptic Bridge (V4)",
+          "version": "4.0.0",
+          "description": "Authenticated, block-partitioned cognitive memory engine and cross-project synaptic bridge for autonomous agents (AIF V4)."
+        }
+
+     c) Copy agentic-skill/AGENTS.md to ~/.gemini/config/plugins/aif/rules/AGENTS.md and ~/.gemini/config/AGENTS.md.
+     d) Copy agentic-skill/SKILL.md to ~/.gemini/config/plugins/aif/skills/aif/SKILL.md, ~/.gemini/config/plugins/aif/skills/ai-context-saving/SKILL.md, ~/.gemini/config/skills/aif/SKILL.md, and ~/.gemini/config/skills/ai-context-saving/SKILL.md.
+
+4. Configure Workspace & Multi-Harness Rules:
+   - Write or update ./AGENTS.md in the current workspace root.
+   - For Cursor, append to .cursorrules or ~/.cursorrules.
+   - For Claude Code, append to CLAUDE.md or ~/.claude/CLAUDE.md.
+   - For Windsurf, append to .windsurfrules or ~/.windsurfrules.
+   - Enforce the following mandatory operating loop:
      """
-     ## Mandatory Cognitive Memory Loop (AIF V4)
-     1. On Session Start: Run `aif recall --core-and-bridge` to load high-importance architectural context and cross-project links.
-     2. Before Complex Tasks: Run `aif scratch "<current goal and in-flight state>"` so abrupt interrupts (Ctrl+C) never lose progress.
-     3. End of EVERY Turn: Self-score the turn's cognitive importance from 0.0 to 1.0. Run:
-        `aif note --project <project_name> --importance <score> --summary "<concise summary>"`
-        - Score >= 0.70: Core architecture / critical decisions (Red Core, preloaded on boot, linked to Bridge).
-        - Score 0.30 - 0.69: Working turn notes (Middle Ring, stop words pruned).
-        - Score < 0.30: Fleeting observations (Outer Crust, deep summaries).
-     4. Cross-Project Context: When information from another repository is needed, run `aif bridge --query "<topic>"`.
-     5. Git Milestone Capture: Commits are automatically captured into memory by the native git post-commit hook.
+     # AIF V4 Cognitive Memory & Synaptic Bridge
+
+     ## Mandatory Cognitive Persistence Invariant
+
+     This invariant governs cognitive memory lifecycle across ALL execution harnesses, workflows, and subagent delegates (including poteto-mode, agystack, autonomous swarms, and coordinator sessions).
+
+     Subagent delegation (such as poteto-agent or research) does NOT waive this invariant. The coordinator MUST execute the boot recall and scratch checkpoints before spawning subagents, and MUST commit turn notes upon receiving subagent results.
+
+     ### 1. Chat Boot Recall (Mandatory on First Turn)
+     Before invoking subagents, reading playbooks, or modifying files:
+     Run:
+     aif recall --core-and-bridge
+     - Instantly loads active project Red Core (INT16_CORE) blocks, including any [PAUSED_MID_TASK] checkpoint from interrupted prior sessions.
+     - Injects relevant cross-project pointers from the Cross-Project Bridge Nexus (bridge_nexus.ai) into working context.
+
+     ### 2. Pre-Task Volatile Scratch (Interrupt Protection)
+     Before initiating multi-file edits, long test runs, refactors, or delegating code writes to a subagent:
+     Run:
+     aif scratch "<current goal, subagent task spec, and active working state>"
+     - Arms the OS-level signal trap. If execution is interrupted (Ctrl+C, SIGINT, SIGTERM), the engine automatically flushes this scratch buffer into the active project's INT16_CORE with importance 0.95 and the [PAUSED_MID_TASK] marker.
+
+     ### 3. Subagent Memory Synchronization
+     When coordinating delegate subagents (e.g., poteto-agent):
+     - Pass relevant INT16_CORE architectural constraints and schemas directly in the subagent prompt.
+     - When the subagent yields control or returns diffs, record the completed milestone and architectural changes into AIF immediately.
+
+     ### 4. End-of-Turn Cognitive Commit (Every Productive Turn)
+     Before concluding any productive turn, evaluate the cognitive importance of the turn (0.0 to 1.0) and commit a note:
+     aif note --importance <0.0-1.0> --summary "<concise summary of decisions and code modifications>"
+     - 0.70 - 1.00 (Red Core / INT16_CORE): Critical architecture, API schemas, breaking changes, or interrupted tasks. Automatically indexed into bridge_nexus.ai.
+     - 0.30 - 0.69 (Black Middle Ring / INT8_RING): Implementation notes, bug fixes, routine turn summaries. Pruned for token efficiency.
+     - 0.00 - 0.29 (Blue Outer Crust / INT2_CRUST): Transient observations, fleeting logs, deep summaries.
      """
 
-4. Verification:
-   - Run: `aif note --importance 0.95 --summary "AIF V4 migration complete" --tags "setup,init"`
+5. Verification:
+   - Run: `aif scratch "Verification test"`
+   - Run: `aif note --importance 0.95 --summary "AIF V4 plugin & multi-harness integration complete" --tags "setup,init,plugin"`
    - Run: `aif recall --core-and-bridge`
    - Confirm that the note is retrieved from INT16_CORE and report success.
 ```
+
 
 ---
 
@@ -151,6 +200,12 @@ If an agent becomes absorbed in complex debugging or multi-file refactoring, use
 > *"Remember to note in .ai"*
 
 This prompts the agent to flush its working conclusions to disk.
+
+### 4. Native Antigravity Plugin & Harness Hierarchy Enforcement
+Modern agent platforms (such as Antigravity) discover rules hierarchically:
+- Plugin rules (`~/.gemini/config/plugins/<name>/rules/AGENTS.md`) are automatically mounted into the root `<user_rules>` block on every turn and in every directory.
+- Workflows such as `agystack` / `poteto-mode` aggressively enforce delegate subagents (`poteto-agent`) in fresh context windows, which can bypass memory checkpoints if instructions live only in project subfolders.
+- By packaging AIF as a first-class Antigravity plugin (`~/.gemini/config/plugins/aif`), AIF's **Supreme Cognitive Persistence Invariant** is injected directly into `<user_rules>`. This binds coordinators to run `aif recall` on turn 1, write `aif scratch` before delegating, and commit `aif note` when subagents report back.
 
 ---
 
@@ -307,6 +362,7 @@ aif watch [--project <project>] [--model <model>]
 
 ```
 .
+├── AGENTS.md                   # Supreme cognitive memory invariant (workspace root)
 ├── Cargo.toml                  # Rust crate manifest (aif binary & lib)
 ├── ai.sh                       # Linux/macOS wrapper script (auto-builds release)
 ├── ai.bat                      # Windows wrapper script (auto-builds release)

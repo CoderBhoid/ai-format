@@ -1,0 +1,26 @@
+{
+  "name": "aif-v4-promo",
+  "version": "4.0.0",
+  "private": true,
+  "description": "Remotion Cinematic Promo for AIF V4 Memory Engine",
+  "scripts": {
+    "sfx": "node scripts/generate-sfx.js",
+    "build": "remotion render src/index.ts AifV4Promo out/aif-v4-promo.mp4",
+    "still": "remotion still src/index.ts AifV4Promo out/still.png",
+    "preview": "remotion preview src/index.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@remotion/cli": "^4.0.260",
+    "@remotion/google-fonts": "^4.0.260",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "remotion": "^4.0.260"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "typescript": "^5.7.0"
+  }
+}

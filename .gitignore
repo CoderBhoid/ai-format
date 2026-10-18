@@ -36,3 +36,7 @@ website/build/
 target/
 **/*.rs.bk
 *.key
+
+# Promo video dependencies and output
+promo-video/node_modules/
+promo-video/out/
