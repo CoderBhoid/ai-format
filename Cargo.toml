@@ -3,7 +3,7 @@ name = "aif"
 version = "4.0.0"
 edition = "2021"
 authors = ["Bhoid"]
-description = "AIF V4 Core Engine: Fast Agentic Context and Orbital Memory"
+description = "Deterministic, model-agnostic, local-first version control & state checkpoints for LLMs and agents"
 
 [lib]
 name = "aif"

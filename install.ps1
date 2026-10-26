@@ -4,7 +4,7 @@ $InstallDir = if ($env:AIF_INSTALL_DIR) { $env:AIF_INSTALL_DIR } else { "$env:US
 $Repo = "CoderBhoid/ai-format"
 $Version = "v4.0.0"
 
-Write-Host "[*] Installing AIF V4 Memory Engine for Windows..." -ForegroundColor Cyan
+Write-Host "[*] Installing AIF V4: Deterministic Version Control & State Checkpoints for LLMs and Agents..." -ForegroundColor Cyan
 
 if (-not (Test-Path $InstallDir)) {
     New-Item -ItemType Directory -Path $InstallDir -Force | Out-Null

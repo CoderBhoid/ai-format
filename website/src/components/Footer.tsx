@@ -50,7 +50,7 @@ export default function Footer() {
                 </div>
               </div>
               <p className="mt-4 text-sm leading-relaxed text-neutral-400">
-                The official landing page and technical specification for the secure .ai-format format.
+                Deterministic, model-agnostic, local-first version control and state checkpoints for LLMs and autonomous agents.
               </p>
               <p className="mt-3 font-mono text-xs text-neutral-500">
                 deploying at{" "}
@@ -108,7 +108,7 @@ export default function Footer() {
         {/* bottom bar */}
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-white/8 pt-8 sm:flex-row">
           <p className="text-xs text-neutral-500 font-display-sans">
-            © {new Date().getFullYear()} Sednium | The .ai-format format specification
+            © {new Date().getFullYear()} Sednium | Deterministic Version Control for LLMs &amp; Agents
           </p>
           <p className="text-xs text-neutral-600 font-display-sans">
             Built with ❤️ by{" "}

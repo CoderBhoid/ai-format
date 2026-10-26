@@ -80,11 +80,11 @@ export default function Benefits() {
           <Eyebrow>why .ai</Eyebrow>
           <ScrollWordReveal
             as="h2"
-            text="Engineered for autonomous cognitive persistence."
+            text="Deterministic, model-agnostic, local-first version control."
             className="mt-5 text-3xl font-bold tracking-tight text-white sm:text-4xl font-display-sans"
           />
           <ScrollWordReveal
-            text="Eight core capabilities that separate AIF V4 from fragile text logs, from sub-millisecond bridge seeks to automated interrupt recovery."
+            text="Eight core capabilities that deliver deterministic state checkpoints for LLMs and agents—from sub-millisecond bridge seeks to zero-token git checkpoints."
             className="mt-4 text-base leading-relaxed text-neutral-400"
           />
         </Reveal>

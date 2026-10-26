@@ -1,11 +1,11 @@
 ---
 name: aif
-description: Manages persistent cognitive memory and cross-project knowledge using the compiled AIF V4 Rust engine. Use on session start for boot recall, before multi-step tasks to write scratch state, at the end of every turn to commit notes into orbital rings, when querying cross-project memory via the synaptic bridge, or when running temporal memory optimization.
+description: Deterministic, model-agnostic, local-first version control and state checkpoints for LLMs and agents using the compiled AIF V4 Rust engine. Use on session start for boot recall, before multi-step tasks to write scratch state, at the end of every turn to commit notes into orbital rings, when querying cross-project memory via the synaptic bridge, or when running temporal memory optimization.
 ---
 
-# AIF V4 Cognitive Memory & Synaptic Bridge
+# AIF V4: Deterministic Version Control & State Checkpoints for LLMs & Agents
 
-Operational guide for managing persistent agentic memory states using the compiled `aif` Rust engine (`AIF\x04`).
+Operational guide for deterministic, model-agnostic, local-first version control and state checkpoints using the compiled `aif` Rust engine (`AIF\x04`).
 
 ---
 

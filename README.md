@@ -22,11 +22,13 @@
 
 ---
 
+> **Deterministic, model-agnostic, local-first version control and state checkpoints for LLMs and agents.**
+
 ## What is AIF V4?
 
-AIF (`.ai`) is an authenticated, block-partitioned cognitive memory engine for autonomous AI coding agents.
+AIF (`.ai`) is a deterministic, model-agnostic, local-first version control and state checkpointing engine for LLMs and autonomous AI coding agents.
 
-Standard agent sessions suffer from context window saturation, repetitive input-prefill token costs, lost states on user interrupts, and memory silos between projects. AIF V4 replaces raw flat text logs with a compiled Rust engine (`aif`).
+Standard agent sessions suffer from context window saturation, repetitive input-prefill token costs, lost states on user interrupts, and memory silos between projects. AIF V4 replaces raw flat text logs with compiled Rust binary state checkpoints (`aif`) that act as version control for LLM context and agent execution states.
 
 ### Key Pillars
 
@@ -62,7 +64,7 @@ irm https://ai.sednium.com/install.ps1 | iex
 Copy and paste this instruction block into Cursor, Claude Code, Antigravity, Windsurf, Copilot, or ChatGPT. Your agent will clone the repository, build the Rust binary, configure your global agent rules, register the Antigravity plugin, and initialize persistent cognitive memory automatically:
 
 ```text
-You are an expert systems engineer. Your task is to install the AIF V4 (ai-format) cognitive memory engine on this machine, integrate its memory lifecycle into my global agent rules and Antigravity plugin hierarchy, and initialize cognitive persistence across all execution harnesses.
+You are an expert systems engineer. Your task is to install the AIF V4 (ai-format) engine (deterministic, model-agnostic, local-first version control & state checkpoints for LLMs and agents) on this machine, integrate its memory lifecycle into my global agent rules and Antigravity plugin hierarchy, and initialize cognitive persistence across all execution harnesses.
 
 Follow these exact steps:
 
@@ -98,7 +100,7 @@ Follow these exact steps:
           "name": "aif",
           "displayName": "AIF Cognitive Memory & Synaptic Bridge (V4)",
           "version": "4.0.0",
-          "description": "Authenticated, block-partitioned cognitive memory engine and cross-project synaptic bridge for autonomous agents (AIF V4)."
+          "description": "Deterministic, model-agnostic, local-first version control & state checkpoints for LLMs and agents (AIF V4)."
         }
 
      c) Copy agentic-skill/AGENTS.md to ~/.gemini/config/plugins/aif/rules/AGENTS.md and ~/.gemini/config/AGENTS.md.

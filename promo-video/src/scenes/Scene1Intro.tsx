@@ -137,7 +137,7 @@ export const Scene1Intro: React.FC = () => {
           transform: `translateY(${(1 - textEntrance) * 15}px)`,
         }}
       >
-        Sub-millisecond orbital context compaction and cryptographic recall for autonomous agents.
+        Deterministic, local-first version control and cryptographic state checkpoints for LLMs and agents.
       </p>
     </AbsoluteFill>
   );

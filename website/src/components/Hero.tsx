@@ -56,16 +56,16 @@ export default function Hero() {
           GitHub
         </a>
 
-        <h1 className="mt-6 max-w-4xl text-balance text-4xl leading-[1.05] tracking-tight text-white sm:text-6xl lg:text-7xl hero-text-shift">
-          <span className="font-display-serif italic font-normal mr-2">Secure</span>
-          <span className="font-display-sans font-extrabold">context persistence</span>
-          <span className="block font-display-sans font-extrabold text-coral mt-2">for long-running agents.</span>
+        <h1 className="mt-6 max-w-5xl text-balance text-4xl leading-[1.05] tracking-tight text-white sm:text-6xl lg:text-7xl hero-text-shift">
+          <span className="font-display-serif italic font-normal mr-2">Deterministic,</span>
+          <span className="font-display-sans font-extrabold">local-first version control</span>
+          <span className="block font-display-sans font-extrabold text-coral mt-2">state checkpoints for LLMs &amp; agents.</span>
         </h1>
 
         <p className="mt-6 max-w-2xl text-pretty text-base leading-relaxed text-neutral-400 sm:text-lg">
-          The <span className="font-mono text-neutral-200">.ai</span> format stores
-          compressed representations of an agent's memory state. This allows agents to resume
-          work instantly without repeating long start-up steps.
+          The <span className="font-mono text-neutral-200">.ai</span> format provides
+          deterministic, model-agnostic, local-first state checkpoints for LLMs and autonomous agents.
+          Resume work instantly without context window exhaustion or re-running expensive initialization loops.
         </p>
 
         <div className="mt-9 flex w-full flex-col items-center justify-center gap-3 sm:w-auto sm:flex-row">

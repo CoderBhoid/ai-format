@@ -67,7 +67,7 @@ const DOCS_DATA: Record<
     Copy and paste this instruction block into Cursor, Claude Code, Antigravity, or Windsurf. Your agent will clone the repository, build the Rust binary, and inject the persistent memory lifecycle into your global configuration automatically:
   </p>
 
-  <pre class="bg-black/40 border border-white/8 rounded-lg p-4 font-mono text-xs text-neutral-200 overflow-x-auto whitespace-pre">You are an expert systems engineer. Install the AIF V4 (ai-format) memory engine and configure my global agent rules:
+  <pre class="bg-black/40 border border-white/8 rounded-lg p-4 font-mono text-xs text-neutral-200 overflow-x-auto whitespace-pre">You are an expert systems engineer. Install the AIF V4 (ai-format) engine: deterministic, model-agnostic, local-first version control and state checkpoints for LLMs and agents and configure my global agent rules:
 
 1. Clone and compile:
    git clone https://github.com/CoderBhoid/ai-format.git ~/.ai-format

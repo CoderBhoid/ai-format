@@ -5,7 +5,7 @@ INSTALL_DIR="${AIF_INSTALL_DIR:-$HOME/.local/bin}"
 REPO="CoderBhoid/ai-format"
 VERSION="v4.0.0"
 
-echo "[*] Installing AIF V4 Memory Engine..."
+echo "[*] Installing AIF V4: Deterministic Version Control & State Checkpoints for LLMs and Agents..."
 
 mkdir -p "$INSTALL_DIR"
 

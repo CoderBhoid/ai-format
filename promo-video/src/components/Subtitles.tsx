@@ -5,7 +5,7 @@ import { theme } from '../theme';
 export const Subtitles: React.FC = () => {
   const frame = useCurrentFrame();
 
-  let text = 'AIF V4: Compiled Rust Memory Engine for Autonomous Agents';
+  let text = 'AIF V4: Deterministic Version Control & State Checkpoints for LLMs and Agents';
   if (frame >= 150 && frame < 390) {
     text = 'Concentric Gravity Shells: INT16 Core, INT8 Ring & INT2 Crust';
   } else if (frame >= 390 && frame < 630) {
@@ -13,7 +13,7 @@ export const Subtitles: React.FC = () => {
   } else if (frame >= 630 && frame < 780) {
     text = 'Zero-Touch Cryptographic Isolation: 256-bit AEAD & Abrupt Interrupt Traps';
   } else if (frame >= 780) {
-    text = 'Unified Cognitive Persistence: .ai-format by Sednium Technologies';
+    text = 'Deterministic Local-First Version Control: .ai-format by Sednium';
   }
 
   // Soft fade transitions between scenes

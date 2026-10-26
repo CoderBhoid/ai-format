@@ -85,7 +85,7 @@ export const Scene5Outro: React.FC = () => {
           opacity: titleSpring,
         }}
       >
-        Unified Cognitive Persistence for Autonomous Agents.
+        Deterministic Version Control & State Checkpoints for LLMs and Agents.
       </p>
 
       {/* Footer Ecosystem Pills */}
